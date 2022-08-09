@@ -1,11 +1,10 @@
 import React from "react";
+import Navbar from "../navbar/Navbar";
 
-type Props = {};
-
-const Header = (props: Props) => {
+const Header = () => {
   return (
     <header>
-      <nav></nav>
+      <Navbar></Navbar>
     </header>
   );
 };
