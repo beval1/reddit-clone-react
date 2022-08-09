@@ -39,7 +39,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 const Navbar = () => {
 	// const theme = useTheme();
 	return (
-		<AppBar position="static" elevation={0}>
+		<AppBar position="static" elevation={1}>
 			<StyledToolbar variant="dense">
 				<Box display="flex">
 					<StyledIconWrapper>
