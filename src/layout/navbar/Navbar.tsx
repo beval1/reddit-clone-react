@@ -12,6 +12,8 @@ import SearchBar from "../../components/SearchBar";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import LoginPage from "../../pages/log-in/LoginPage";
+import { useNavigate } from "react-router-dom";
+import LoginRegisterModal from "../../components/LoginRegisterModal";
 
 const StyledToolbar = styled(Toolbar)({
 	display: "flex",
@@ -40,12 +42,22 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }));
 
 const Navbar = () => {
-	const [showLogin, setShowLogin] = useState(false);
+	const [showLoginRegisterModal, setShowLoginRegisterModal] = useState<"login" | "register" | null | undefined>(null);
+	let navigate = useNavigate();
+	function navigateToHome() {
+		navigate("/");
+	}
+
 	return (
 		<AppBar position="static" elevation={1}>
-			<LoginPage open={showLogin} close={() => setShowLogin(false)} />
+			<LoginRegisterModal
+				modal={showLoginRegisterModal}
+				setModal={(state: "login" | "register" | null | undefined) =>
+					setShowLoginRegisterModal(state)
+				}
+			/>
 			<StyledToolbar variant="dense">
-				<Box display="flex">
+				<Box display="flex" onClick={navigateToHome}>
 					<StyledIconWrapper>
 						<RedditIcon
 							color="primary"
@@ -55,11 +67,11 @@ const Navbar = () => {
 							}}
 						></RedditIcon>
 					</StyledIconWrapper>
+
 					<Typography
 						variant="h6"
 						noWrap
 						component="a"
-						href="/"
 						sx={{
 							mr: 2,
 							display: { xs: "none", md: "flex" },
@@ -79,7 +91,7 @@ const Navbar = () => {
 					<StyledButton
 						variant="outlined"
 						color="info"
-						onClick={() => setShowLogin(true)}
+						onClick={() => setShowLoginRegisterModal("login")}
 					>
 						Log In
 					</StyledButton>
@@ -90,6 +102,7 @@ const Navbar = () => {
 						sx={{
 							marginLeft: "15px",
 						}}
+						onClick={() => setShowLoginRegisterModal("register")}
 					>
 						Sign Up
 					</StyledButton>
