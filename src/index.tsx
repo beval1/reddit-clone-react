@@ -20,8 +20,8 @@ root.render(
 			<Routes>
 				<Route path="/" element={<App />}>
 					<Route path="/home" element={<HomePage />} />
-					<Route path="/log-in" element={<LoginPage />} />
-					<Route path="/register" element={<RegisterPage />} />
+					{/* <Route path="/log-in" element={<LoginPage />} /> */}
+					{/* <Route path="/register" element={<RegisterPage />} /> */}
 					<Route path="*" element={<NotFoundPage />} />
 				</Route>
 			</Routes>
