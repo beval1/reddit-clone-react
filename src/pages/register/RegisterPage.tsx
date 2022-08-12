@@ -1,4 +1,4 @@
-import { Box, Button, FormGroup, Typography } from "@mui/material";
+import { Box, Button, Divider, FormGroup, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import React from "react";
 import { Link, To, useNavigate } from "react-router-dom";
@@ -40,35 +40,16 @@ export default function RegisterPage(props: RegisterPageProps) {
 			>
 				Continue with Google
 			</LoginRegisterProviderButton>
-			<Box
-				display="flex"
-				alignItems="center"
-				gap="10px"
-				marginBottom="10px"
-				marginTop="5px"
+			<Divider
+				light
+				sx={{
+					marginBottom: "10px",
+					marginTop: "5px",
+					color: "#878a8c",
+				}}
 			>
-				<span
-					style={{
-						borderTop: "1px solid #edeff1",
-						width: "45%",
-					}}
-				></span>
-				<span
-					style={{
-						marginLeft: 2,
-						marginRight: 2,
-						color: "#878a8c",
-					}}
-				>
-					OR
-				</span>
-				<span
-					style={{
-						borderTop: "1px solid #edeff1",
-						width: "45%",
-					}}
-				></span>
-			</Box>
+				OR
+			</Divider>
 			<Box
 				component="form"
 				sx={{

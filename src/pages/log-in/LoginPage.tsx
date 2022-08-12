@@ -1,4 +1,4 @@
-import { Box, Button, FormGroup, styled, Typography } from "@mui/material";
+import { Box, Button, Divider, FormGroup, styled, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { RedditTextField } from "../../components/RedditTextField";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -46,35 +46,16 @@ export default function LoginPage(props: LoginPageProps) {
 						>
 							Continue with Email
 						</StyledButton> */}
-			<Box
-				display="flex"
-				alignItems="center"
-				gap="10px"
-				marginBottom="10px"
-				marginTop="5px"
+			<Divider
+				light
+				sx={{
+					marginBottom: "10px",
+					marginTop: "5px",
+					color: "#878a8c",
+				}}
 			>
-				<span
-					style={{
-						borderTop: "1px solid #edeff1",
-						width: "45%",
-					}}
-				></span>
-				<span
-					style={{
-						marginLeft: 2,
-						marginRight: 2,
-						color: "#878a8c",
-					}}
-				>
-					OR
-				</span>
-				<span
-					style={{
-						borderTop: "1px solid #edeff1",
-						width: "45%",
-					}}
-				></span>
-			</Box>
+				OR
+			</Divider>
 			<Box
 				component="form"
 				sx={{
@@ -130,7 +111,9 @@ export default function LoginPage(props: LoginPageProps) {
 					<Typography component="a">
 						<StyledLink
 							to="#"
-							onClick={() => props.modalManagement(null, "register")}
+							onClick={() =>
+								props.modalManagement(null, "register")
+							}
 						>
 							SIGN UP
 						</StyledLink>
