@@ -1,4 +1,3 @@
-import internal from "stream";
 import { IAuthor } from "./IAuthor";
 import { ISubreddit } from "./ISubreddit";
 
@@ -8,11 +7,11 @@ export interface IPost {
     subreddit: ISubreddit
     title: string,
     content?: string,
-    type: "image" | "text",
+    type: "image" | "text" | "link",
     downvotedByUser: boolean,
     upvotedByUser: boolean,
     commentsCount: number,
     votes: number,
-    updatedOn: Date,
-    createdOn: Date,
+    updatedOn: string,
+    createdOn: string,
 }

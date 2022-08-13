@@ -1,5 +1,4 @@
 import {
-	Box,
 	Dialog,
 	DialogContent,
 	DialogTitle,
@@ -47,6 +46,8 @@ type ModalProps = {
 };
 
 const LoginRegisterModal = (props: ModalProps) => {
+	const navigate = useNavigate();
+
 	const modalManagement = (
 		path: To | undefined | null,
 		modal: "login" | "register" | undefined | null
@@ -54,7 +55,6 @@ const LoginRegisterModal = (props: ModalProps) => {
 		props.setModal(modal)
 
 		if (path) {
-			let navigate = useNavigate();
 			navigate(path);
 		}
 	};

@@ -1,14 +1,5 @@
 import {
 	Box,
-	Button,
-	Card,
-	CardActions,
-	CardContent,
-	CardMedia,
-	Container,
-	Divider,
-	Stack,
-	Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { getAuthenticatedUser } from "../../api/authService";

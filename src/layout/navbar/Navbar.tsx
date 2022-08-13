@@ -8,7 +8,7 @@ import {
 	Typography,
 	useTheme,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import RedditIcon from "@mui/icons-material/Reddit";
 import SearchBar from "../../components/SearchBar";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
@@ -22,6 +22,7 @@ import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import { GreenDotBadge } from "../../components/GreenDotBadge";
 import { IUser } from "../../api/interfaces/IUser";
 import SubredditSelect from "../../components/SubredditSelect";
+import { ModalContext } from "../../App";
 
 const StyledToolbar = styled(Toolbar)({
 	display: "flex",
@@ -50,9 +51,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }));
 
 const Navbar = () => {
-	const [showLoginRegisterModal, setShowLoginRegisterModal] = useState<
-		"login" | "register" | null | undefined
-	>(null);
+	const modal = useContext(ModalContext);
 	const navigate = useNavigate();
 	const navigateToHome = () => {
 		navigate("/");
@@ -63,9 +62,9 @@ const Navbar = () => {
 	return (
 		<AppBar position="fixed" elevation={1}>
 			<LoginRegisterModal
-				modal={showLoginRegisterModal}
+				modal={modal.showLoginRegisterModal}
 				setModal={(state: "login" | "register" | null | undefined) =>
-					setShowLoginRegisterModal(state)
+					modal.setShowLoginRegisterModal(state)
 				}
 			/>
 			<StyledToolbar variant="dense">
@@ -224,7 +223,7 @@ const Navbar = () => {
 						<StyledButton
 							variant="outlined"
 							color="info"
-							onClick={() => setShowLoginRegisterModal("login")}
+							onClick={() => modal.setShowLoginRegisterModal("login")}
 						>
 							Log In
 						</StyledButton>
@@ -236,7 +235,7 @@ const Navbar = () => {
 								marginLeft: "15px",
 							}}
 							onClick={() =>
-								setShowLoginRegisterModal("register")
+								modal.setShowLoginRegisterModal("register")
 							}
 						>
 							Sign Up

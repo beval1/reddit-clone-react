@@ -1,18 +1,12 @@
 import {
 	Box,
 	Card,
-	CardContent,
-	Typography,
-	Divider,
-	CardActions,
-	Button,
 	Avatar,
 	InputBase,
 } from "@mui/material";
 import React from "react";
 import { IUser } from "../api/interfaces/IUser";
 import { GreenDotBadge } from "./GreenDotBadge";
-import { RedditTextField } from "./RedditTextField";
 import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
 import { alpha } from "@mui/material/styles";
