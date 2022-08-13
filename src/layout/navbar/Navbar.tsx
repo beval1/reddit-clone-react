@@ -31,9 +31,9 @@ const StyledToolbar = styled(Toolbar)({
 });
 
 const StyledIconWrapper = styled("div")(({ theme }) => ({
-	borderRadius: "20px",
-	width: "40px",
-	Height: "40px",
+	borderRadius: "22px",
+	width: "44px",
+	Height: "44px",
 	backgroundColor: theme.palette.secondary.main,
 }));
 
@@ -61,7 +61,7 @@ const Navbar = () => {
 	const theme = useTheme();
 
 	return (
-		<AppBar position="static" elevation={1}>
+		<AppBar position="fixed" elevation={1}>
 			<LoginRegisterModal
 				modal={showLoginRegisterModal}
 				setModal={(state: "login" | "register" | null | undefined) =>
@@ -83,7 +83,8 @@ const Navbar = () => {
 							color="primary"
 							fontSize="large"
 							sx={{
-								marginLeft: "2px",
+								marginLeft: "4px",
+								marginTop: "3px",
 							}}
 						></RedditIcon>
 					</StyledIconWrapper>
@@ -102,7 +103,7 @@ const Navbar = () => {
 							color: "inherit",
 							textDecoration: "none",
 							marginLeft: "10px",
-							marginTop: "3px",
+							marginTop: "6px",
 						}}
 					>
 						RedditClone
@@ -119,36 +120,31 @@ const Navbar = () => {
 								gap: "5px",
 							},
 						}}
+						alignItems="center"
 					>
 						<TextsmsOutlinedIcon
 							fontSize="large"
 							sx={{
 								padding: "2px 5px",
 								borderRadius: "5px",
-								"&:hover": {
-									backgroundColor: "#E8E8E8",
-								},
 							}}
+							className="box-hover"
 						></TextsmsOutlinedIcon>
 						<NotificationsNoneOutlinedIcon
 							fontSize="large"
 							sx={{
 								padding: "2px 5px",
 								borderRadius: "5px",
-								"&:hover": {
-									backgroundColor: "#E8E8E8",
-								},
 							}}
+							className="box-hover"
 						></NotificationsNoneOutlinedIcon>
 						<AddIcon
 							fontSize="large"
 							sx={{
 								padding: "2px 5px",
 								borderRadius: "5px",
-								"&:hover": {
-									backgroundColor: "#E8E8E8",
-								},
 							}}
+							className="box-hover"
 						></AddIcon>
 						<Box
 							className="profile-box"
