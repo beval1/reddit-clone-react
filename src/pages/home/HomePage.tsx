@@ -28,6 +28,7 @@ const HomePage = (props: Props) => {
 		"best"
 	);
 	const user: IUser | null = getAuthenticatedUser();
+	const listCards = posts ? posts.map((p) => <PostCard key={p.id} post={p} />) : null;
 
 	useEffect(() => {
 		getFeed().then((data) => {
@@ -37,22 +38,19 @@ const HomePage = (props: Props) => {
 	return (
 		<Box>
 			<Box display="flex" flexDirection="row" gap="16px">
-				<Box display="flex" flexDirection="column" gap="20px">
+				<Box display="flex" flexDirection="column" gap="20px" flexBasis="70%">
 					{user ? <CreatePostCard user={user} /> : null}
 					<SortingPostsCard
 						setSorting={setSorting}
 						sorting={sorting}
 					></SortingPostsCard>
-					<PostCard></PostCard>
-					<PostCard></PostCard>
-					<PostCard></PostCard>
-					<PostCard></PostCard>
-					<PostCard></PostCard>
+					{listCards}
 				</Box>
 				<Box
 					sx={{
-						width: "25vw",
+						maxWidth: "25vw",
 					}}
+					flexBasis="30%"
 				>
 					<TopCommunitiesCard></TopCommunitiesCard>
 				</Box>

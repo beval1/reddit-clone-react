@@ -32,7 +32,7 @@ export const CreatePostCard = (props: Props) => {
 			}}
 		>
 			<Box display="flex" alignItems="center" margin="0 10px">
-				<Box>
+				<Box onClick={() => navigate("/my-profile")}>
 					<GreenDotBadge
 						overlap="circular"
 						anchorOrigin={{

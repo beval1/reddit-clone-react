@@ -13,12 +13,6 @@ type Props = {};
 const TopCommunitiesCard = (props: Props) => {
 	return (
 		<Card>
-			{/* <CardMedia
-								component="img"
-								alt="green iguana"
-								height="140"
-								image="/static/images/cards/contemplative-reptile.jpg"
-							/> */}
 			<CardContent>
 				<Typography gutterBottom variant="h5" component="div">
 					Top Communities
