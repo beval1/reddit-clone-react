@@ -1,5 +1,5 @@
-export interface IServerResponse {
+export interface IServerResponse<T=Object> {
     message?: string,
-    content?: Object,
+    content?: T,
     timestamp: Date
 }

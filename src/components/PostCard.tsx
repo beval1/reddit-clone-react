@@ -214,6 +214,7 @@ export const PostCard = (props: PostCardProps) => {
 										height: "25px",
 										marginRight: "5px",
 										width: "15px",
+										boxShadow: 0,
 									}}
 									onClick={handleJoin}
 								>

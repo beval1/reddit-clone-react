@@ -1,11 +1,12 @@
-import { Box, Button, Divider, FormGroup, styled, Typography } from "@mui/material";
+import { Alert, Box, Button, Divider, FormGroup, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { RedditTextField } from "../../components/RedditTextField";
 import GoogleIcon from "@mui/icons-material/Google";
 import AppleIcon from "@mui/icons-material/Apple";
-import { Link, To, useNavigate } from "react-router-dom";
+import { To } from "react-router-dom";
 import StyledLink from "../../components/StyledLink";
 import LoginRegisterProviderButton from "../../components/LoginRegisterProviderButton";
+import { logIn } from "../../api/authService";
 
 type LoginPageProps = {
 	modalManagement: (
@@ -15,6 +16,31 @@ type LoginPageProps = {
 };
 
 export default function LoginPage(props: LoginPageProps) {
+	type formProps = {
+		usernameOrEmail: string;
+		password: string;
+	};
+
+	const [form, setForm] = useState<formProps>({} as formProps);
+	const [error, setError] = useState<string>("");
+
+	const handleInputChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
+		setForm((prev) => ({
+			...prev,
+			[e.target.name]: e.target.value.trim(),
+		}));
+	};
+
+	const handleLogin = () => {
+		logIn(form.usernameOrEmail, form.password)
+			.then(() => props.modalManagement(null, null))
+			.catch((e: Error) => {
+				setError(e.message);
+			});
+	};
+
 	return (
 		<Box
 			sx={{
@@ -67,19 +93,28 @@ export default function LoginPage(props: LoginPageProps) {
 				noValidate
 				autoComplete="off"
 			>
+				{error ? (
+					<Box marginBottom="10px">
+						<Alert severity="error">{error}</Alert>
+					</Box>
+				) : null}
 				<FormGroup>
 					<RedditTextField
 						label="Username or Email"
-						id="user-input"
+						id="usernamePrEmail"
+						name="usernameOrEmail"
 						variant="filled"
 						size="small"
+						onChange={(e) => handleInputChange(e)}
 					/>
 					<RedditTextField
+						name="password"
 						label="Password"
-						id="pass-input"
+						id="password"
 						variant="filled"
 						size="small"
 						type="password"
+						onChange={(e) => handleInputChange(e)}
 					/>
 				</FormGroup>
 				<Button
@@ -90,6 +125,7 @@ export default function LoginPage(props: LoginPageProps) {
 						borderRadius: 4,
 						width: "100%",
 					}}
+					onClick={handleLogin}
 				>
 					Log In
 				</Button>
