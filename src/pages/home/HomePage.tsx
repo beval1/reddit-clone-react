@@ -24,7 +24,9 @@ type Props = {};
 
 const HomePage = (props: Props) => {
 	const [posts, setPosts] = useState<IPost[] | null>([]);
-	const [sorting, setSorting] = useState<"best" | "hot" | "new" | "top">("best")
+	const [sorting, setSorting] = useState<"best" | "hot" | "new" | "top">(
+		"best"
+	);
 	const user: IUser | null = getAuthenticatedUser();
 
 	useEffect(() => {
@@ -34,26 +36,27 @@ const HomePage = (props: Props) => {
 	}, []);
 	return (
 		<Box>
-			<Container maxWidth="md">
-				<Box display="flex" flexDirection="row" gap="16px">
-					<Box display="flex" flexDirection="column" gap="20px">
-						{user ? <CreatePostCard user={user} /> : null}
-						<SortingPostsCard setSorting={setSorting} sorting={sorting}></SortingPostsCard>
-						<PostCard></PostCard>
-						<PostCard></PostCard>
-						<PostCard></PostCard>
-						<PostCard></PostCard>
-						<PostCard></PostCard>
-					</Box>
-					<Box
-						sx={{
-							width: "25vw",
-						}}
-					>
-						<TopCommunitiesCard></TopCommunitiesCard>
-					</Box>
+			<Box display="flex" flexDirection="row" gap="16px">
+				<Box display="flex" flexDirection="column" gap="20px">
+					{user ? <CreatePostCard user={user} /> : null}
+					<SortingPostsCard
+						setSorting={setSorting}
+						sorting={sorting}
+					></SortingPostsCard>
+					<PostCard></PostCard>
+					<PostCard></PostCard>
+					<PostCard></PostCard>
+					<PostCard></PostCard>
+					<PostCard></PostCard>
 				</Box>
-			</Container>
+				<Box
+					sx={{
+						width: "25vw",
+					}}
+				>
+					<TopCommunitiesCard></TopCommunitiesCard>
+				</Box>
+			</Box>
 		</Box>
 	);
 };

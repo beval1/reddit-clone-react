@@ -7,9 +7,8 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/home/HomePage";
-import LoginPage from "./pages/log-in/LoginPage";
-import RegisterPage from "./pages/register/RegisterPage";
 import NotFoundPage from "./pages/not-found/NotFoundPage";
+import CreatePost from "./pages/create-post/CreatePost";
 
 const root = ReactDOM.createRoot(
 	document.getElementById("root") as HTMLElement
@@ -20,7 +19,7 @@ root.render(
 			<Routes>
 				<Route path="/" element={<App />}>
 					<Route path="/home" element={<HomePage />} />
-					<Route path="/create-post" element={<HomePage />} />
+					<Route path="/create-post/:postTypeParam" element={<CreatePost />} />
 					<Route path="*" element={<NotFoundPage />} />
 				</Route>
 			</Routes>

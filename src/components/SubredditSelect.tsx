@@ -1,18 +1,23 @@
-import { Autocomplete, Box, TextField } from "@mui/material";
+import { Autocomplete, Box, SxProps, TextField, Theme } from "@mui/material";
 import { ISubreddit } from "../api/interfaces/ISubreddit";
 import React from "react";
 
 type SubredditSelectProps = {
-	width?: string,
 	size?: "small" | "medium"
+	sx?: SxProps<Theme> | undefined
 }
 
-export default function SubredditSelect(props: SubredditSelectProps) {
+export const SubredditSelect = (props: SubredditSelectProps) => {
 	return (
 		<Autocomplete
 			size={props.size || "small"}
 			id="subreddit-select"
-			sx={{ width: props.width || "200px" }}
+			sx={{
+				...props.sx,
+				"& .MuiAutocomplete-groupLabel:focused": {
+					display: "none",
+				},
+			}}
 			options={subreddits}
 			autoHighlight
 			getOptionLabel={(subreddit) => subreddit.name}
@@ -50,3 +55,5 @@ const subreddits: readonly ISubreddit[] = [
     { name: "AskReddit", description: 'Ask everything', image: '' },
     { name: "Fitness", description: 'Ask everything', image: '' },
 ];
+
+export default SubredditSelect

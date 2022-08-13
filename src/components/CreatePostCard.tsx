@@ -79,10 +79,12 @@ export const CreatePostCard = (props: Props) => {
 					<ImageOutlinedIcon
 						fontSize="large"
 						className="box-hover"
+						onClick={() => navigate("/create-post/image")}
 					></ImageOutlinedIcon>
 					<LinkOutlinedIcon
 						fontSize="large"
 						className="box-hover"
+						onClick={() => navigate("/create-post/link")}
 					></LinkOutlinedIcon>
 				</Box>
 			</Box>

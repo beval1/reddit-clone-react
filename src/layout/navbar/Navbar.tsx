@@ -109,7 +109,7 @@ const Navbar = () => {
 						RedditClone
 					</Typography>
 				</Box>
-				{user ? <SubredditSelect /> : null}
+				{user ? <SubredditSelect sx={{width: "200px"}} /> : null}
 				<SearchBar></SearchBar>
 				{user ? (
 					<Box
