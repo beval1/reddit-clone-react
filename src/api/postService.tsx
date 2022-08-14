@@ -2,6 +2,7 @@ import config from "../config";
 import { IServerResponse } from "./interfaces/IServerResponse";
 import { ICreatePost } from "./interfaces/ICreatePost";
 import { getAuthToken } from "./authService";
+import { IPost } from "./interfaces/IPost";
 
 const linkRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
 
@@ -75,3 +76,12 @@ export const createPost = async (subredditId: number | undefined, post: ICreateP
 		throw Error(resObj.message);
 	}
 };
+
+export const getPost = async (postId: string): Promise<IPost> => {
+	const response = await fetch(`${config.API_URL}/posts/${postId}`);
+	const resObj = await response.json();
+	if (response.status != 200) {
+		throw Error(resObj.message)
+	}
+	return resObj.content;
+}
