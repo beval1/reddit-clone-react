@@ -1,3 +1,5 @@
+import { ISubreddit } from "./ISubreddit";
+
 export interface IUser {
     username: string,
     email: string,
@@ -12,5 +14,6 @@ export interface IUser {
     totalKarma: number,
     profileImage: string | null,
     bannerImage: string | null,
+    subreddits: ISubreddit[],
     status: "online" | "offline",
 }

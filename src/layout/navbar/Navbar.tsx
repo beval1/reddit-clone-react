@@ -8,7 +8,7 @@ import {
 	Typography,
 	useTheme,
 } from "@mui/material";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import RedditIcon from "@mui/icons-material/Reddit";
 import SearchBar from "../../components/SearchBar";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
@@ -23,6 +23,7 @@ import { GreenDotBadge } from "../../components/GreenDotBadge";
 import { IUser } from "../../api/interfaces/IUser";
 import SubredditSelect from "../../components/SubredditSelect";
 import { ModalContext } from "../../App";
+import { ISubreddit } from "../../api/interfaces/ISubreddit";
 
 const StyledToolbar = styled(Toolbar)({
 	display: "flex",
@@ -58,6 +59,8 @@ const Navbar = () => {
 	};
 	const user: IUser | null = getAuthenticatedUser();
 	const theme = useTheme();
+	const [selectedSubreddit, setSelectedSubreddit] = useState<ISubreddit | null>(null);
+
 
 	return (
 		<AppBar position="fixed" elevation={1}>
@@ -108,7 +111,7 @@ const Navbar = () => {
 						RedditClone
 					</Typography>
 				</Box>
-				{user ? <SubredditSelect sx={{width: "200px"}} /> : null}
+				{user ? <SubredditSelect sx={{ width: "200px" }} user={user} setSelectedSubreddit={setSelectedSubreddit} /> : null}
 				<SearchBar></SearchBar>
 				{user ? (
 					<Box

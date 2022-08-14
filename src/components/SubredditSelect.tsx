@@ -1,15 +1,23 @@
 import { Autocomplete, Box, SxProps, TextField, Theme } from "@mui/material";
-import { ISubreddit } from "../api/interfaces/ISubreddit";
 import React from "react";
+import { ISubreddit } from "../api/interfaces/ISubreddit";
+import { IUser } from "../api/interfaces/IUser";
 
 type SubredditSelectProps = {
-	size?: "small" | "medium"
-	sx?: SxProps<Theme> | undefined
-}
+	size?: "small" | "medium",
+	sx?: SxProps<Theme> | undefined,
+	setSelectedSubreddit: React.Dispatch<
+		React.SetStateAction<ISubreddit | null>
+	>,
+	user: IUser,
+};
 
 export const SubredditSelect = (props: SubredditSelectProps) => {
 	return (
 		<Autocomplete
+			onChange={(event: any, newValue: ISubreddit | null) => {
+				props.setSelectedSubreddit(newValue);
+			}}
 			size={props.size || "small"}
 			id="subreddit-select"
 			sx={{
@@ -18,7 +26,7 @@ export const SubredditSelect = (props: SubredditSelectProps) => {
 					display: "none",
 				},
 			}}
-			options={subreddits}
+			options={props.user.subreddits}
 			autoHighlight
 			getOptionLabel={(subreddit) => subreddit.name}
 			renderOption={(props, subreddit) => (
@@ -49,11 +57,6 @@ export const SubredditSelect = (props: SubredditSelectProps) => {
 			)}
 		/>
 	);
-}
+};
 
-const subreddits: readonly ISubreddit[] = [
-    { name: "AskReddit", description: 'Ask everything', image: '' },
-    { name: "Fitness", description: 'Ask everything', image: '' },
-];
-
-export default SubredditSelect
+export default SubredditSelect;

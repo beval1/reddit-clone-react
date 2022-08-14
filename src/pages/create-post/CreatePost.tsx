@@ -1,4 +1,4 @@
-import { Card, Divider, Tabs, TextField, Typography } from "@mui/material";
+import { Button, Card, Divider, InputBase, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -13,26 +13,47 @@ import "./CreatePost.css";
 import KeyboardVoiceIcon from "@mui/icons-material/KeyboardVoice";
 import BallotIcon from "@mui/icons-material/Ballot";
 import SubredditSelect from "../../components/SubredditSelect";
+import { getAuthenticatedUser } from "../../api/authService";
+import { ISubreddit } from "../../api/interfaces/ISubreddit";
+import TextPost from "./TextPost";
+import LinkPost from "./LinkPost";
+import ImagePost from "./ImagePost";
 
 type Props = {};
 
 const CreatePost = (props: Props) => {
-	let { postTypeParam } = useParams();
-	const [postType, setPostType] = useState(postTypeParam || "");
+	const user = getAuthenticatedUser();
 
-	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+	const { postTypeParam } = useParams();
+	const [postType, setPostType] = useState(postTypeParam || "");
+	const [selectedSubreddit, setSelectedSubreddit] = useState<ISubreddit | null>(null);
+
+
+	const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
 		setPostType(newValue);
 	};
+
+	// const getSubredditByName = (): ISubreddit | undefined => {
+	// 	return user?.subreddits.find(s => s.name === selectedSubreddit);
+	// }
 
 	return (
 		<Box>
 			<Box display="flex" flexDirection="row" gap="16px">
 				<Box width="100%">
-					<SubredditSelect sx={{
-						width: "200px",
-						backgroundColor: "white",
-						marginBottom: "10px",
-					}}></SubredditSelect>
+					<Typography variant="h6">Create Post</Typography>
+					<Divider sx={{ margin: "10px 0" }} />
+					{user ? (
+						<SubredditSelect
+							sx={{
+								width: "200px",
+								backgroundColor: "white",
+								marginBottom: "10px",
+							}}
+							setSelectedSubreddit={setSelectedSubreddit}
+							user={user}
+						></SubredditSelect>
+					) : null}
 					<Card>
 						<TabContext value={postType}>
 							<Box
@@ -41,12 +62,12 @@ const CreatePost = (props: Props) => {
 									borderColor: "divider",
 								}}
 							>
-								<TabList onChange={handleChange}>
+								<TabList onChange={handleTabChange}>
 									<Tab
 										icon={<PostAddIcon />}
 										iconPosition="start"
 										label="Post"
-										value=""
+										value="text"
 									/>
 									<Tab
 										icon={<ImageIcon />}
@@ -76,9 +97,15 @@ const CreatePost = (props: Props) => {
 									/>
 								</TabList>
 							</Box>
-							<TabPanel value="">Text</TabPanel>
-							<TabPanel value="image">Image</TabPanel>
-							<TabPanel value="link">Link</TabPanel>
+							<TabPanel value="text">
+								<TextPost subreddit={selectedSubreddit} />
+							</TabPanel>
+							<TabPanel value="image">
+								<ImagePost subreddit={selectedSubreddit} />
+							</TabPanel>
+							<TabPanel value="link">
+								<LinkPost subreddit={selectedSubreddit} />
+							</TabPanel>
 						</TabContext>
 					</Card>
 				</Box>

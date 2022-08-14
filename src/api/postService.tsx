@@ -1,8 +1,12 @@
 import config from "../config";
 import { IServerResponse } from "./interfaces/IServerResponse";
+import { ICreatePost } from "./interfaces/ICreatePost";
+import { getAuthToken } from "./authService";
+
+const linkRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
 
 export const upvotePost = async (postId: number): Promise<string | null> => {
-    return await votePost(postId, "upvote");
+	return await votePost(postId, "upvote");
 }
 
 export const downvotePost = async (postId: number): Promise<string | null> => {
@@ -15,7 +19,7 @@ export const unvotePost = async (postId: number): Promise<string | null> => {
 
 const votePost = async (postId: number, type: "upvote" | "unvote" | "downvote"): Promise<string | null> => {
 	let data: IServerResponse | null = null;
-	await fetch(`${config.API_URL}/posts/post/${postId}/${type}`, {method: "POST"})
+	await fetch(`${config.API_URL}/posts/post/${postId}/${type}`, { method: "POST" })
 		.then(async (response) => {
 			let resObj: IServerResponse = await response.json();
 
@@ -30,4 +34,44 @@ const votePost = async (postId: number, type: "upvote" | "unvote" | "downvote"):
 		});
 	console.log(data);
 	return data ? data["message"] : null;
+};
+
+export const createPost = async (subredditId: number | undefined, post: ICreatePost, postType: "text" | "image" | "link") => {
+	if (!subredditId) {
+		throw Error("You must specify subreddit!");
+	}
+	if (postType === "link" && post.link && !post.link.match(linkRegex)) {
+		throw Error("Not a valid Link!");
+	}
+	if (postType === "image" && !post.image?.multipartFile) {
+		throw Error("You must upload an image!");
+	}
+
+	let formData = new FormData();
+	if (postType === "image") {
+		formData.append("postTitle", post.title)
+		if (post.image?.multipartFile) {
+			formData.append("file", post.image?.multipartFile)
+		}
+	}
+
+	const authToken = getAuthToken();
+	const imageHeaders = {
+		"Authorization": `Bearer ${authToken}`,
+	};
+	const otherHeaders = {
+		"Authorization": `Bearer ${authToken}`,
+		"Content-Type": "application/json",
+	};
+
+	const response = await fetch(`${config.API_URL}/posts/${postType}-post/${subredditId}`, {
+		method: "POST",
+		headers: postType === "image" ? imageHeaders : otherHeaders,
+		body: postType === "image" ? formData : JSON.stringify(post),
+	});
+	const resObj: IServerResponse = await response.json();
+	console.log(resObj.message);
+	if (response.status !== 201) {
+		throw Error(resObj.message);
+	}
 };

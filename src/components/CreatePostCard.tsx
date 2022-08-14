@@ -68,7 +68,7 @@ export const CreatePostCard = (props: Props) => {
 						})}
 						size="medium"
 						placeholder="Create Post"
-						onClick={() => navigate("/create-post")}
+						onClick={() => navigate("/create-post/text")}
 					></InputBase>
 					<ImageOutlinedIcon
 						fontSize="large"

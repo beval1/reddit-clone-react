@@ -7,6 +7,7 @@ import { To } from "react-router-dom";
 import StyledLink from "../../components/StyledLink";
 import LoginRegisterProviderButton from "../../components/LoginRegisterProviderButton";
 import { logIn } from "../../api/authService";
+import { handleInputChange } from "../../utils/utility";
 
 type LoginPageProps = {
 	modalManagement: (
@@ -23,15 +24,6 @@ export default function LoginPage(props: LoginPageProps) {
 
 	const [form, setForm] = useState<formProps>({} as formProps);
 	const [error, setError] = useState<string>("");
-
-	const handleInputChange = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-	) => {
-		setForm((prev) => ({
-			...prev,
-			[e.target.name]: e.target.value.trim(),
-		}));
-	};
 
 	const handleLogin = () => {
 		logIn(form.usernameOrEmail, form.password)
@@ -105,7 +97,7 @@ export default function LoginPage(props: LoginPageProps) {
 						name="usernameOrEmail"
 						variant="filled"
 						size="small"
-						onChange={(e) => handleInputChange(e)}
+						onChange={(e) => handleInputChange(e, setForm)}
 					/>
 					<RedditTextField
 						name="password"
@@ -114,7 +106,7 @@ export default function LoginPage(props: LoginPageProps) {
 						variant="filled"
 						size="small"
 						type="password"
-						onChange={(e) => handleInputChange(e)}
+						onChange={(e) => handleInputChange(e, setForm)}
 					/>
 				</FormGroup>
 				<Button
