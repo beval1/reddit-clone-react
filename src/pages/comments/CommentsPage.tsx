@@ -44,8 +44,8 @@ const CommentsPage = () => {
                     <Box>
                         {/* <SubredditBanner subreddit={subreddit}></SubredditBanner> */}
                     </Box>
-                    <Box display="flex" flexDirection="row" flexBasis="60%" gap="15px">
-                        <Box width="100%">
+                    <Box display="flex" flexDirection="row" gap="15px">
+                        <Box width="100%" display="flex" flexDirection="column" flexBasis="70%" maxWidth="70%">
                             <PostCard post={originalPost}></PostCard>
                             <Box className="comments-wrapper">
                                 <Card>
@@ -53,7 +53,7 @@ const CommentsPage = () => {
                                 </Card>
                             </Box>
                         </Box>
-                        <Box className="right-bar" flexBasis="40%" width="100%">
+                        <Box className="right-bar" flexBasis="30%" maxWidth="30%">
                             <SubredditInfoCard subreddit={subreddit}></SubredditInfoCard>
                         </Box>
                     </Box>

@@ -6,6 +6,7 @@ import CakeOutlinedIcon from '@mui/icons-material/CakeOutlined';
 import { ModalContext, UserContext } from '../App';
 import { isUserAlreadyJoinedSubreddit } from '../utils/utility';
 import { getUserProfile } from '../api/authService';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
     subreddit: ISubreddit | null
@@ -14,6 +15,7 @@ type Props = {
 const SubredditInfoCard = (props: Props) => {
     const userContext = useContext(UserContext);
     const modalContext = useContext(ModalContext);
+    const navigate = useNavigate();
 
     const transformDate = () => {
         if (!props.subreddit) {
@@ -43,12 +45,12 @@ const SubredditInfoCard = (props: Props) => {
 
 
     return (
-        <Box width="100%">
+        <Box >
             <Card>
-                <Box display="flex" flexDirection="column" width="100%">
+                <Box display="flex" flexDirection="column" width="100%" >
                     <Box sx={(theme) => ({
                         backgroundColor: theme.palette.secondary.main,
-                        padding: "10px"
+                        padding: "15px"
                     })}>
                         <Typography variant="body1" fontWeight="bold" color="primary">About Community</Typography>
                     </Box>
@@ -65,10 +67,12 @@ const SubredditInfoCard = (props: Props) => {
                         />
                         <Typography variant="body1" fontWeight="bold">{`r/${props.subreddit?.name}`}</Typography>
                     </Box>
-                    <Box className="description" margin="0 10px">
-                        <Typography variant="caption">{`${props.subreddit?.description}`}</Typography>
+                    <Box className="description" padding="10px">
+                        <Typography variant="caption" sx={{
+                            wordWrap: "break-word"
+                        }}>{`${props.subreddit?.description}`}</Typography>
                     </Box>
-                    <Box className="members" margin="5px 10px" display="flex" gap="60px">
+                    <Box className="members" display="flex" gap="60px" padding="10px">
                         <Box className="total-members">
                             <Box display="flex" flexDirection="column">
                                 <Typography variant="body2" fontWeight="bold">{`${props.subreddit?.membersCount}`}</Typography>
@@ -77,12 +81,13 @@ const SubredditInfoCard = (props: Props) => {
                         </Box>
                         <Box className="online-members">
                             <Box display="flex" flexDirection="column">
-                                <Typography variant="body2" fontWeight="bold">0 (not implemented)</Typography>
+                                {/* TODO: Not implemented yet... */}
+                                <Typography variant="body2" fontWeight="bold">0</Typography>
                                 <Typography variant="body2">Online</Typography>
                             </Box>
                         </Box>
                     </Box>
-                    <Box margin="0 10px" width="100%">
+                    <Box width="100%" padding="10px">
                         <Divider sx={{
                             marginBottom: "10px"
                         }}></Divider>
@@ -90,7 +95,9 @@ const SubredditInfoCard = (props: Props) => {
                             <CakeOutlinedIcon fontSize="large"></CakeOutlinedIcon>
                             <Typography variant="body2" fontWeight="bold">{transformDate()}</Typography>
                         </Box>
-                        {isUserAlreadyJoinedSubreddit(userContext.user, props.subreddit) ? null : <Box width="100%" margin="15px 0">
+                        <Box width="100%" display="flex" justifyContent="center">
+                        {isUserAlreadyJoinedSubreddit(userContext.user, props.subreddit) ?
+                            <Box width="100%" margin="15px 0">
                             <Button sx={{
                                 margin: "0 auto",
                                 width: "80%",
@@ -99,9 +106,21 @@ const SubredditInfoCard = (props: Props) => {
                                 size="large"
                                 color="secondary"
                                 variant="contained"
+                                onClick={() => navigate("/create-post/text")}
+                            >Create Post</Button>
+                        </Box> : <Box width="100%" margin="15px 0">
+                            <Button sx={{
+                                margin: "0 auto",
+                                width: "100%",
+                                borderRadius: "25px"
+                            }}
+                                size="large"
+                                color="secondary"
+                                variant="contained"
                                 onClick={handleJoin}
                             >Join</Button>
-                        </Box>}
+                                </Box>}
+                        </Box>
                     </Box>
 
                 </Box>
