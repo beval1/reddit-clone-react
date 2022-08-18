@@ -20,7 +20,13 @@ export const unvotePost = async (postId: number): Promise<string | null> => {
 
 const votePost = async (postId: number, type: "upvote" | "unvote" | "downvote"): Promise<string | null> => {
 	let data: IServerResponse | null = null;
-	await fetch(`${config.API_URL}/posts/post/${postId}/${type}`, { method: "POST" })
+	const authToken = getAuthToken();
+	await fetch(`${config.API_URL}/posts/post/${postId}/${type}`, {
+		method: "POST",
+		headers: {
+			"Authorization": `Bearer ${authToken}`
+		}
+	})
 		.then(async (response) => {
 			let resObj: IServerResponse = await response.json();
 
