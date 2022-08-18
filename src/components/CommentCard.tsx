@@ -42,6 +42,14 @@ const CommentCard = (props: CommentCardProps) => {
                             </Typography>
                         </Box>
                     </Box>
+                    <Box className="comment-content">
+                        <Typography
+                            variant="body2"
+                            color="text.secondary"
+                        >
+                            {props.comment.content}
+                        </Typography>
+                    </Box>
                 </Box>
             </Box>
         </Box>
