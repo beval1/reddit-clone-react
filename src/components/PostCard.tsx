@@ -15,6 +15,7 @@ import { getAuthenticatedUser } from "../api/authService";
 import { IUser } from "../api/interfaces/IUser";
 import { ModalContext } from "../App";
 import { useNavigate } from "react-router-dom";
+import { calculateTimePassed } from "../utils/utility";
 
 const StyledActionBox = styled(Box)({
 	borderRadius: "5px",
@@ -38,19 +39,6 @@ export const PostCard = (props: PostCardProps) => {
 	const user: IUser | null = getAuthenticatedUser();
 	const modalContext = React.useContext(ModalContext);
 	const navigate = useNavigate();
-
-	const calculateTimePassed = (): string => {
-		let prevTime = new Date(props.post.createdOn);
-		let thisTime = new Date(); // now
-		let diff = thisTime.getTime() - prevTime.getTime(); // now - createdOn
-		let daysPassed = diff / (1000 * 60 * 60 * 24); // positive number of days
-		let hours = diff / (1000 * 60 * 60); // positive number of hours
-		if (hours > 24) {
-			return `${Math.floor(daysPassed)} days ago`;
-		} else {
-			return `${Math.floor(hours)} hours ago`;
-		}
-	};
 
 	const [upvoted, setUpvoted] = useState<boolean>(props.post.upvotedByUser);
 	const [downvoted, setDownvoted] = useState<boolean>(
@@ -115,6 +103,10 @@ export const PostCard = (props: PostCardProps) => {
 
 		//TO DO: logged in user logic
 	};
+
+	const openPost = () => {
+		navigate(`/comments/${props.post.id}`)
+	}
 
 	return (
 		<Card sx={{ maxWidth: "lg", padding: "0 0" }}>
@@ -198,7 +190,7 @@ export const PostCard = (props: PostCardProps) => {
 											props.post.subreddit.name
 										} - Posted by u/${
 											props.post.author.username
-										} ${calculateTimePassed()} ${
+											} ${calculateTimePassed(props.post.createdOn)} ${
 											displayAwards() || ""
 										}`}
 									</Typography>
@@ -221,7 +213,7 @@ export const PostCard = (props: PostCardProps) => {
 									Join
 								</Button>
 							</Box>
-							<Typography
+							<Typography onClick={openPost}
 								gutterBottom
 								variant="h5"
 								component="div"
@@ -229,7 +221,7 @@ export const PostCard = (props: PostCardProps) => {
 								{props.post.title}
 							</Typography>
 						</Box>
-						<Box className="post-content" marginBottom="10px">
+						<Box className="post-content" marginBottom="10px" onClick={openPost}>
 							{props.post.type === "text" ? (
 								<Box
 									className="text-post-content"

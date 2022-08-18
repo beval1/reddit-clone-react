@@ -9,6 +9,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/home/HomePage";
 import NotFoundPage from "./pages/not-found/NotFoundPage";
 import CreatePost from "./pages/create-post/CreatePost";
+import CommentsPage from "./pages/comments/CommentsPage";
 
 const root = ReactDOM.createRoot(
 	document.getElementById("root") as HTMLElement
@@ -20,6 +21,7 @@ root.render(
 				<Route path="/" element={<App />}>
 					<Route path="/home" element={<HomePage />} />
 					<Route path="/create-post/:postTypeParam" element={<CreatePost />} />
+					<Route path="/comments/:postId" element={<CommentsPage />} />
 					<Route path="*" element={<NotFoundPage />} />
 				</Route>
 			</Routes>

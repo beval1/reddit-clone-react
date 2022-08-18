@@ -78,8 +78,9 @@ export const createPost = async (subredditId: number | undefined, post: ICreateP
 };
 
 export const getPost = async (postId: string): Promise<IPost> => {
-	const response = await fetch(`${config.API_URL}/posts/${postId}`);
+	const response = await fetch(`${config.API_URL}/posts/post/${postId}`);
 	const resObj = await response.json();
+	console.log(resObj)
 	if (response.status != 200) {
 		throw Error(resObj.message)
 	}

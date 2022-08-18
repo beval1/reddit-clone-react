@@ -7,3 +7,16 @@ export const handleInputChange = (
         [e.target.name]: e.target.value.trim(),
     }));
 };
+
+export const calculateTimePassed = (dateString: string): string => {
+    let prevTime = new Date(dateString);
+    let thisTime = new Date(); // now
+    let diff = thisTime.getTime() - prevTime.getTime(); // now - createdOn
+    let daysPassed = diff / (1000 * 60 * 60 * 24); // positive number of days
+    let hours = diff / (1000 * 60 * 60); // positive number of hours
+    if (hours > 24) {
+        return `${Math.floor(daysPassed)} days ago`;
+    } else {
+        return `${Math.floor(hours)} hours ago`;
+    }
+};
