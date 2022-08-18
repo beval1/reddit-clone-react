@@ -9,13 +9,13 @@ import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutline
 import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { downvotePost, unvotePost, upvotePost } from "../api/postService";
-import { getAuthenticatedUser } from "../api/authService";
-import { IUser } from "../api/interfaces/IUser";
-import { ModalContext } from "../App";
+import { getUserProfile } from "../api/authService";
+import { ModalContext, UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
-import { calculateTimePassed } from "../utils/utility";
+import { calculateTimePassed, isUserAlreadyJoinedSubreddit } from "../utils/utility";
+import { joinSubreddit } from "../api/subredditService";
 
 const StyledActionBox = styled(Box)({
 	borderRadius: "5px",
@@ -31,13 +31,8 @@ type PostCardProps = {
 };
 
 export const PostCard = (props: PostCardProps) => {
-	//future functionality
-	const displayAwards = () => {
-		return null;
-	};
-
-	const user: IUser | null = getAuthenticatedUser();
-	const modalContext = React.useContext(ModalContext);
+	const userContext = useContext(UserContext);
+	const modalContext = useContext(ModalContext);
 	const navigate = useNavigate();
 
 	const [upvoted, setUpvoted] = useState<boolean>(props.post.upvotedByUser);
@@ -46,7 +41,7 @@ export const PostCard = (props: PostCardProps) => {
 	);
 
 	const handleUpvote = (postId: number) => {
-		if (!user) {
+		if (!userContext.user) {
 			modalContext.setShowLoginRegisterModal("register");
 			return;
 		}
@@ -60,7 +55,7 @@ export const PostCard = (props: PostCardProps) => {
 		}
 	};
 	const handleDownvote = (postId: number) => {
-		if (!user) {
+		if (!userContext.user) {
 			modalContext.setShowLoginRegisterModal("register");
 			return;
 		}
@@ -76,7 +71,7 @@ export const PostCard = (props: PostCardProps) => {
 	};
 
 	const handleAward = () => {
-		if (!user) {
+		if (!userContext.user) {
 			modalContext.setShowLoginRegisterModal("register");
 			return;
 		}
@@ -84,7 +79,7 @@ export const PostCard = (props: PostCardProps) => {
 	};
 
 	const handleSave = () => {
-		if (!user) {
+		if (!userContext.user) {
 			modalContext.setShowLoginRegisterModal("register");
 			return;
 		}
@@ -95,13 +90,20 @@ export const PostCard = (props: PostCardProps) => {
 		//TODO: share functionality
 	};
 
+	//future functionality
+	const displayAwards = () => {
+		return null;
+	};
+
 	const handleJoin = () => {
-		if (!user) {
+		if (!userContext.user) {
 			modalContext.setShowLoginRegisterModal("register");
 			return;
 		}
 
-		//TO DO: logged in user logic
+		joinSubreddit(props.post.subreddit.id).then(() => {
+			getUserProfile().then(user => userContext.setUser(user))
+		})
 	};
 
 	const openPost = () => {
@@ -174,7 +176,7 @@ export const PostCard = (props: PostCardProps) => {
 								>
 									<Avatar
 										alt={props.post.subreddit.name}
-										src={props.post.subreddit.image || ""}
+										src={props.post.subreddit.mainImage || ""}
 										variant="circular"
 										sx={{
 											width: 24,
@@ -186,32 +188,29 @@ export const PostCard = (props: PostCardProps) => {
 										variant="body2"
 										color="text.secondary"
 									>
-										{`r/${
-											props.post.subreddit.name
-										} - Posted by u/${
-											props.post.author.username
-											} ${calculateTimePassed(props.post.createdOn)} ${
-											displayAwards() || ""
-										}`}
+										{`r/${props.post.subreddit.name
+											} - Posted by u/${props.post.author.username
+											} ${calculateTimePassed(props.post.createdOn)} ${displayAwards() || ""
+											}`}
 									</Typography>
-								</Box>
-								<Button
-									variant="contained"
-									color="info"
-									size="small"
-									sx={{
-										right: 0,
-										position: "relative",
-										borderRadius: "25px",
-										height: "25px",
-										marginRight: "5px",
-										width: "15px",
-										boxShadow: 0,
-									}}
-									onClick={handleJoin}
-								>
-									Join
-								</Button>
+								</Box>{isUserAlreadyJoinedSubreddit(userContext.user, props.post.subreddit) ? null :
+									<Button
+										variant="contained"
+										color="info"
+										size="small"
+										sx={{
+											right: 0,
+											position: "relative",
+											borderRadius: "25px",
+											height: "25px",
+											marginRight: "5px",
+											width: "15px",
+											boxShadow: 0,
+										}}
+										onClick={handleJoin}
+									>
+										Join
+									</Button>}
 							</Box>
 							<Typography onClick={openPost}
 								gutterBottom

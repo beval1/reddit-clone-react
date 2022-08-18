@@ -38,7 +38,7 @@ export const SubredditSelect = (props: SubredditSelectProps) => {
 					<img
 						loading="lazy"
 						width="20"
-						src={subreddit.image || ""}
+						src={subreddit.mainImage || ""}
 						// srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
 						alt=""
 					/>

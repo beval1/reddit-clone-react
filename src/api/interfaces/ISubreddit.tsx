@@ -2,5 +2,8 @@ export interface ISubreddit {
     id: number,
     name: string,
     description: string,
-    image: string | null
+    mainImage: string | null,
+    backgroundImage: string | null,
+    membersCount: number,
+    createdOn: string,
 }

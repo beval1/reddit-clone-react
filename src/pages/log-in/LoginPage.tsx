@@ -1,5 +1,5 @@
 import { Alert, Box, Button, Divider, FormGroup, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { RedditTextField } from "../../components/RedditTextField";
 import GoogleIcon from "@mui/icons-material/Google";
 import AppleIcon from "@mui/icons-material/Apple";
@@ -8,6 +8,7 @@ import StyledLink from "../../components/StyledLink";
 import LoginRegisterProviderButton from "../../components/LoginRegisterProviderButton";
 import { logIn } from "../../api/authService";
 import { handleInputChange } from "../../utils/utility";
+import { UserContext } from "../../App";
 
 type LoginPageProps = {
 	modalManagement: (
@@ -22,12 +23,16 @@ export default function LoginPage(props: LoginPageProps) {
 		password: string;
 	};
 
+	const userContext = useContext(UserContext);
 	const [form, setForm] = useState<formProps>({} as formProps);
 	const [error, setError] = useState<string>("");
 
 	const handleLogin = () => {
 		logIn(form.usernameOrEmail, form.password)
-			.then(() => props.modalManagement(null, null))
+			.then((user) => {
+				userContext.setUser(user)
+				props.modalManagement(null, null)
+			})
 			.catch((e: Error) => {
 				setError(e.message);
 			});

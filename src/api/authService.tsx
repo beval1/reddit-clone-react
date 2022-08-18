@@ -3,13 +3,13 @@ import { ILogInResponse } from "./interfaces/ILogInResponse";
 import { IServerResponse } from "./interfaces/IServerResponse";
 import { IUser } from "./interfaces/IUser";
 
-export const getAuthenticatedUser = (): IUser | null => {
-	let user = localStorage.getItem("user");
-	if (user) {
-		return JSON.parse(user);
-	}
-	return null;
-};
+// export const getAuthenticatedUser = (): IUser | null => {
+// 	let user = localStorage.getItem("user");
+// 	if (user) {
+// 		return JSON.parse(user);
+// 	}
+// 	return null;
+// };
 
 export const getAuthToken = (): string | null => {
 	let token = localStorage.getItem("accessToken");
@@ -37,10 +37,7 @@ export const logIn = async (
 		throw Error(resObj.message)
 	}
 	localStorage.setItem("accessToken", JSON.stringify(resObj.content?.accessToken));
-	const user: IUser | null = await getUserProfile();
-	localStorage.setItem("user", JSON.stringify(user))
-	console.log(user)
-	return user;
+	return await getUserProfile();
 };
 
 export const getUserProfile = async (): Promise<IUser | null> => {
@@ -55,8 +52,12 @@ export const getUserProfile = async (): Promise<IUser | null> => {
 	if (response.status !== 200) {
 		console.log(resObj.message);
 		return null;
-	}
+	};
+	localStorage.setItem("user", JSON.stringify(resObj.content))
+	console.log(resObj.content)
 	return resObj.content || null;
 };
+
+
 
 

@@ -1,0 +1,113 @@
+import { Avatar, Box, Button, Card, Divider, Typography } from '@mui/material'
+import React, { useContext, useEffect, useState } from 'react'
+import { ISubreddit } from '../api/interfaces/ISubreddit'
+import { getSubreddit, joinSubreddit } from '../api/subredditService'
+import CakeOutlinedIcon from '@mui/icons-material/CakeOutlined';
+import { ModalContext, UserContext } from '../App';
+import { isUserAlreadyJoinedSubreddit } from '../utils/utility';
+import { getUserProfile } from '../api/authService';
+
+type Props = {
+    subreddit: ISubreddit | null
+}
+
+const SubredditInfoCard = (props: Props) => {
+    const userContext = useContext(UserContext);
+    const modalContext = useContext(ModalContext);
+
+    const transformDate = () => {
+        if (!props.subreddit) {
+            return;
+        }
+
+        const date = new Date(props.subreddit.createdOn);
+        const monthName = date.toLocaleString('en-US', {
+            month: 'long',
+        })
+
+        return `Created ${monthName} ${date.getDay()}, ${date.getFullYear()}`;
+    }
+
+    const handleJoin = () => {
+        if (!userContext.user) {
+            modalContext.setShowLoginRegisterModal("register");
+            return;
+        }
+
+        if (props.subreddit) {
+            joinSubreddit(props.subreddit.id).then(() => {
+                getUserProfile().then(user => userContext.setUser(user))
+            })
+        }
+    };
+
+
+    return (
+        <Box width="100%">
+            <Card>
+                <Box display="flex" flexDirection="column" width="100%">
+                    <Box sx={(theme) => ({
+                        backgroundColor: theme.palette.secondary.main,
+                        padding: "10px"
+                    })}>
+                        <Typography variant="body1" fontWeight="bold" color="primary">About Community</Typography>
+                    </Box>
+                    <Box className="avatar" display="flex" alignItems="center">
+                        <Avatar
+                            alt={props.subreddit?.name}
+                            src={props.subreddit?.mainImage || ""}
+                            variant="circular"
+                            sx={{
+                                width: 50,
+                                height: 50,
+                                margin: "10px",
+                            }}
+                        />
+                        <Typography variant="body1" fontWeight="bold">{`r/${props.subreddit?.name}`}</Typography>
+                    </Box>
+                    <Box className="description" margin="0 10px">
+                        <Typography variant="caption">{`${props.subreddit?.description}`}</Typography>
+                    </Box>
+                    <Box className="members" margin="5px 10px" display="flex" gap="60px">
+                        <Box className="total-members">
+                            <Box display="flex" flexDirection="column">
+                                <Typography variant="body2" fontWeight="bold">{`${props.subreddit?.membersCount}`}</Typography>
+                                <Typography variant="body2">Members</Typography>
+                            </Box>
+                        </Box>
+                        <Box className="online-members">
+                            <Box display="flex" flexDirection="column">
+                                <Typography variant="body2" fontWeight="bold">0 (not implemented)</Typography>
+                                <Typography variant="body2">Online</Typography>
+                            </Box>
+                        </Box>
+                    </Box>
+                    <Box margin="0 10px" width="100%">
+                        <Divider sx={{
+                            marginBottom: "10px"
+                        }}></Divider>
+                        <Box display="flex" alignItems="center" gap="10px">
+                            <CakeOutlinedIcon fontSize="large"></CakeOutlinedIcon>
+                            <Typography variant="body2" fontWeight="bold">{transformDate()}</Typography>
+                        </Box>
+                        {isUserAlreadyJoinedSubreddit(userContext.user, props.subreddit) ? null : <Box width="100%" margin="15px 0">
+                            <Button sx={{
+                                margin: "0 auto",
+                                width: "80%",
+                                borderRadius: "25px"
+                            }}
+                                size="large"
+                                color="secondary"
+                                variant="contained"
+                                onClick={handleJoin}
+                            >Join</Button>
+                        </Box>}
+                    </Box>
+
+                </Box>
+            </Card>
+        </Box>
+    )
+}
+
+export default SubredditInfoCard

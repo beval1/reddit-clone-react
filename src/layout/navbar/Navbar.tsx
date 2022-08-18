@@ -16,13 +16,11 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 import LoginRegisterModal from "../../components/LoginRegisterModal";
-import { getAuthenticatedUser } from "../../api/authService";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import { GreenDotBadge } from "../../components/GreenDotBadge";
-import { IUser } from "../../api/interfaces/IUser";
 import SubredditSelect from "../../components/SubredditSelect";
-import { ModalContext } from "../../App";
+import { ModalContext, UserContext } from "../../App";
 import { ISubreddit } from "../../api/interfaces/ISubreddit";
 
 const StyledToolbar = styled(Toolbar)({
@@ -57,7 +55,8 @@ const Navbar = () => {
 	const navigateToHome = () => {
 		navigate("/");
 	};
-	const user: IUser | null = getAuthenticatedUser();
+	const userContext = useContext(UserContext);
+	const user = userContext.user
 	const theme = useTheme();
 	const [selectedSubreddit, setSelectedSubreddit] = useState<ISubreddit | null>(null);
 

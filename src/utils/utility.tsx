@@ -1,3 +1,6 @@
+import { ISubreddit } from "../api/interfaces/ISubreddit";
+import { IUser } from "../api/interfaces/IUser";
+
 export const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     setState: (value: React.SetStateAction<any>) => void
@@ -20,3 +23,11 @@ export const calculateTimePassed = (dateString: string): string => {
         return `${Math.floor(hours)} hours ago`;
     }
 };
+
+export const isUserAlreadyJoinedSubreddit = (user: IUser | null, subreddit: ISubreddit | null): boolean => {
+    if (!user || !subreddit) {
+        return false;
+    }
+
+    return user.subreddits.find(s => s.id === subreddit.id) ? true : false;
+}

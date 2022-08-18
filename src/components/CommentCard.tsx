@@ -26,7 +26,7 @@ const CommentCard = (props: CommentCardProps) => {
                 </Box>
                 <Box className="content">
                     <Box className="general-comment-info">
-                        <Box display="flex">
+                        <Box display="flex" gap="5px">
                             <Typography
                                 variant="body2"
                                 color="text.secondary"

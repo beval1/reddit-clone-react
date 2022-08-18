@@ -1,6 +1,6 @@
-import { Button, Card, Divider, InputBase, TextField, Typography } from "@mui/material";
+import { Card, Divider, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -13,16 +13,17 @@ import "./CreatePost.css";
 import KeyboardVoiceIcon from "@mui/icons-material/KeyboardVoice";
 import BallotIcon from "@mui/icons-material/Ballot";
 import SubredditSelect from "../../components/SubredditSelect";
-import { getAuthenticatedUser } from "../../api/authService";
 import { ISubreddit } from "../../api/interfaces/ISubreddit";
 import TextPost from "./TextPost";
 import LinkPost from "./LinkPost";
 import ImagePost from "./ImagePost";
+import { UserContext } from "../../App";
 
 type Props = {};
 
 const CreatePost = (props: Props) => {
-	const user = getAuthenticatedUser();
+	const userContext = useContext(UserContext);
+	const user = userContext.user;
 
 	const { postTypeParam } = useParams();
 	const [postType, setPostType] = useState(postTypeParam || "");
