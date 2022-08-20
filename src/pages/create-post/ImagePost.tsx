@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { ISubreddit } from "../../api/interfaces/ISubreddit";
 import { createPost } from "../../api/postService";
 import { ICreatePost } from "../../api/interfaces/ICreatePost";
+import { useNavigate } from "react-router-dom";
 
 type ImagePostProps = {
     subreddit: ISubreddit | null;
@@ -12,6 +13,7 @@ const ImagePost = (props: ImagePostProps) => {
     const [error, setError] = useState("");
     const [image, setImage] = useState<File | null>(null);
     const [title, setTitle] = useState<string>("");
+    const navigate = useNavigate();
 
     const handlePost = () => {
         const post: ICreatePost = {
@@ -19,7 +21,7 @@ const ImagePost = (props: ImagePostProps) => {
             image: {multipartFile: image},
         };
         console.log(post)
-        createPost(props.subreddit?.id, post, "image").catch((error: Error) => setError(error.message));
+        createPost(props.subreddit?.id, post, "image").then(() => navigate("/home")).catch((error: Error) => setError(error.message));
     };
 
     return (

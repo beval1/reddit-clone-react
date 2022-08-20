@@ -130,11 +130,11 @@ export default function LoginPage(props: LoginPageProps) {
 			<Box marginTop="10px">
 				<Typography component="p" marginBottom="15px" fontSize="small">
 					Forgot your
-					<Typography component="a" fontSize="small">
+					<Typography component="p" fontSize="small">
 						<StyledLink to="/"> username </StyledLink>
 					</Typography>
 					or
-					<Typography component="a" fontSize="small">
+					<Typography component="p" fontSize="small">
 						<StyledLink to="/"> password </StyledLink>
 					</Typography>
 					?

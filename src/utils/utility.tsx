@@ -17,10 +17,13 @@ export const calculateTimePassed = (dateString: string): string => {
     let diff = thisTime.getTime() - prevTime.getTime(); // now - createdOn
     let daysPassed = diff / (1000 * 60 * 60 * 24); // positive number of days
     let hours = diff / (1000 * 60 * 60); // positive number of hours
+    let minutes = diff / (1000 * 60); // positive number of minutes
     if (hours > 24) {
         return `${Math.floor(daysPassed)} days ago`;
-    } else {
+    } else if (hours > 1) {
         return `${Math.floor(hours)} hours ago`;
+    } else {
+        return `${Math.floor(minutes)} minutes ago`;
     }
 };
 

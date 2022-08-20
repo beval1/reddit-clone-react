@@ -4,6 +4,7 @@ import { ISubreddit } from "../../api/interfaces/ISubreddit";
 import { createPost } from "../../api/postService";
 import { ICreatePost } from "../../api/interfaces/ICreatePost";
 import { handleInputChange } from "../../utils/utility";
+import { useNavigate } from "react-router-dom";
 
 type LinkPostProps = {
 	subreddit: ISubreddit | null;
@@ -18,6 +19,7 @@ const LinkPost = (props: LinkPostProps) => {
 		{} as LinkPostFormProps
 	);
 	const [error, setError] = useState("");
+	const navigate = useNavigate();
 
 	const handlePost = () => {
 		const post: ICreatePost = {
@@ -25,7 +27,7 @@ const LinkPost = (props: LinkPostProps) => {
 			link: linkPostForm.link
 		};
         console.log(post)
-		createPost(props.subreddit?.id, post, "link").catch((error: Error) => setError(error.message));
+		createPost(props.subreddit?.id, post, "link").then(() => navigate("/home")).catch((error: Error) => setError(error.message));
 	};
 
 	return (

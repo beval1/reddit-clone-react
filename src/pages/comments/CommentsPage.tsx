@@ -1,14 +1,16 @@
-import { Box, Card } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { Box, Button, Card, Divider, InputBase, TextField } from '@mui/material'
+import React, { useContext, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { getAllCommentsForPost } from '../../api/commentService'
+import { createCommentForPost, getAllCommentsForPost } from '../../api/commentService'
 import { IComment } from '../../api/interfaces/IComment'
 import { IPost } from '../../api/interfaces/IPost'
 import { ISubreddit } from '../../api/interfaces/ISubreddit'
 import { getPost } from '../../api/postService'
 import { getSubreddit } from '../../api/subredditService'
+import { ModalContext, UserContext } from '../../App'
 import CommentCard from '../../components/CommentCard'
 import { PostCard } from '../../components/PostCard'
+import { RedditTextField } from '../../components/RedditTextField'
 import SubredditBanner from '../../components/SubredditBanner'
 import SubredditInfoCard from '../../components/SubredditInfoCard'
 
@@ -17,25 +19,66 @@ const CommentsPage = () => {
     const [comments, setComments] = useState<IComment[]>([]);
     const [originalPost, setOriginalPost] = useState<IPost | null>(null);
     const [subreddit, setSubreddit] = useState<ISubreddit | null>(null);
-
+    const [commentContent, setCommentContent] = useState<string>("");
+    const userContext = useContext(UserContext)
+    const modalContext = useContext(ModalContext)
+    const commentRef = useRef<HTMLInputElement | null>(null)
 
     useEffect(() => {
-        if (postId) {
-            getAllCommentsForPost(postId).then(data => {
+        if (!postId){
+            return;
+        }
+
+        getPost(postId).then((post: IPost | null) => {
+            setOriginalPost(post);
+            if (post) {
+                getSubreddit(post?.subreddit.id).then(data => {
+                    console.log(data)
+                    setSubreddit(data)
+                }).catch(error => console.log(error));
+                loadComments(post);
+            }
+        }).catch(error => console.log(error.message))
+
+    }, [])
+
+    const loadComments = (post: IPost | null) => {
+        if (post) {
+            getAllCommentsForPost(post.id).then(data => {
+                //comparing content is very, very bad idea...
+                //but theoretically there shouldn't be two posts with exactly the same content
+                data = data.filter(c => {
+                    console.log(c.content)
+                    if (c.content.trim() !== post.content?.trim()) {
+                        console.log("here")
+                        return true;
+                    }
+                    return false;
+                })
                 setComments(data);
             }).catch(error => console.log(error.message))
-            getPost(postId).then((post: IPost | null) => {
-                setOriginalPost(post);
-                if (post) {
-                    getSubreddit(post?.subreddit.id).then(data => {
-                        console.log(data)
-                        setSubreddit(data)
-                    }).catch(error => console.log(error));
-                } 
-            }).catch(error => console.log(error.message))
-            
         }
-    }, [])
+    }
+
+    const handleComment = () => {
+        if (!userContext || !userContext?.user) {
+            modalContext.setShowLoginRegisterModal("register")
+        } else {
+            createCommentForPost(Number(postId), commentContent).then(() => {
+                setCommentContent("");
+                if (commentRef.current) {
+                    commentRef.current.value = "";
+                }
+                loadComments(originalPost)
+            }).catch(error => console.log(error.message))
+        }
+    }
+
+    const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if (e.target.value !== "") {
+            setCommentContent(e.target.value)
+        }
+    }
 
     return (
         <Box>
@@ -47,8 +90,39 @@ const CommentsPage = () => {
                     <Box display="flex" flexDirection="row" gap="15px">
                         <Box width="100%" display="flex" flexDirection="column" flexBasis="70%" maxWidth="70%">
                             <PostCard post={originalPost}></PostCard>
-                            <Box className="comments-wrapper">
+                            <Box className="comments-wrapper" marginTop="20px">
                                 <Card>
+                                    <Box sx={{
+                                        margin: "15px auto",
+                                        width: "80%",
+                                    }}>
+                                        <RedditTextField
+                                            multiline
+                                            rows={6}
+                                            placeholder="What are your thought?"
+                                            variant='filled'
+                                            fullWidth
+                                            sx={{
+                                                margin: "0 auto"
+                                            }}
+                                            onChange={(e) => handleCommentChange(e)}
+                                            inputRef={commentRef}
+                                        ></RedditTextField>
+                                        <Box marginTop="5px" sx={{
+                                            display: "flex",
+                                            justifyContent: "flex-end"
+                                        }}>
+                                            <Button
+                                                variant="contained"
+                                                color="info"
+                                                onClick={handleComment}
+                                                disabled={commentContent ? false : true}
+                                            >
+                                                Comment
+                                            </Button>
+                                        </Box>
+                                    </Box>
+                                    <Divider></Divider>
                                     {comments.map((c) => <CommentCard key={c.id} comment={c} />)}
                                 </Card>
                             </Box>
