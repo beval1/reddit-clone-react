@@ -29,6 +29,7 @@ const CommentCard = (props: CommentCardProps) => {
             unvoteComment(commentId).then(() => setUpvoted(false));
         } else {
             upvoteComment(commentId).then(() => {
+                props.comment.votes++;
                 setDownvoted(false);
                 setUpvoted(true);
             });
@@ -44,6 +45,7 @@ const CommentCard = (props: CommentCardProps) => {
             unvoteComment(commentId).then(() => setDownvoted(false));
         } else {
             downvoteComment(commentId).then(() => {
+                props.comment.votes--;
                 setDownvoted(true);
                 setUpvoted(false);
             });
@@ -105,11 +107,7 @@ const CommentCard = (props: CommentCardProps) => {
                             })}
                         />
                         <Typography variant="body2" color="text.secondary">
-                            {upvoted ? props.comment.votes + 1 : null}
-                            {downvoted ? props.comment.votes - 1 : null}
-                            {!downvoted && !upvoted
-                                ? props.comment.votes
-                                : null}
+                            {props.comment.votes}
                         </Typography>
                         <ThumbDownIcon
                             fontSize="small"

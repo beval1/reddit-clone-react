@@ -49,6 +49,7 @@ export const PostCard = (props: PostCardProps) => {
 			unvotePost(postId).then(() => setUpvoted(false));
 		} else {
 			upvotePost(postId).then(() => {
+				props.post.votes++;
 				setDownvoted(false);
 				setUpvoted(true);
 			});
@@ -64,6 +65,7 @@ export const PostCard = (props: PostCardProps) => {
 			unvotePost(postId).then(() => setDownvoted(false));
 		} else {
 			downvotePost(postId).then(() => {
+				props.post.votes--;
 				setDownvoted(true);
 				setUpvoted(false);
 			});
@@ -137,11 +139,7 @@ export const PostCard = (props: PostCardProps) => {
 								})}
 							/>
 							<Typography variant="body2" color="text.secondary">
-								{upvoted ? props.post.votes + 1 : null}
-								{downvoted ? props.post.votes - 1 : null}
-								{!downvoted && !upvoted
-									? props.post.votes
-									: null}
+								{props.post.votes}
 							</Typography>
 							<ThumbDownIcon
 								fontSize="medium"
