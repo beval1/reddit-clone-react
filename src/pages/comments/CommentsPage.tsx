@@ -55,6 +55,8 @@ const CommentsPage = () => {
                     }
                     return false;
                 })
+                data = data.sort((a, b) => a.votes - b.votes).reverse();
+                console.log(data)
                 setComments(data);
             }).catch(error => console.log(error.message))
         }

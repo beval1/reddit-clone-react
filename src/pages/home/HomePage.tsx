@@ -24,7 +24,10 @@ const HomePage = (props: Props) => {
 
 	useEffect(() => {
 		getFeed().then((data) => {
-			setPosts(data);
+			if (data) {
+				data = data.sort((a, b) => a.votes - b.votes).reverse();
+				setPosts(data);
+			}
 		});
 	}, []);
 	return (

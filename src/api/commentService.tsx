@@ -1,6 +1,7 @@
 import config from "../config"
 import { getAuthToken } from "./authService";
 import { IComment } from "./interfaces/IComment";
+import { IServerResponse } from "./interfaces/IServerResponse";
 
 export const getAllCommentsForPost = async (postId: number, pageNumber?: number): Promise<IComment[]> => {
     const response = await fetch(`${config.API_URL}/comments/${postId}`);
@@ -27,3 +28,40 @@ export const createCommentForPost = async (postId: number, commentContent: strin
     }
     return resObj.messgage || null;
 }
+
+export const upvoteComment = async (postId: number): Promise<string | null> => {
+    return await voteComment(postId, "upvote");
+}
+
+export const downvoteComment = async (postId: number): Promise<string | null> => {
+    return await voteComment(postId, "downvote");
+};
+
+export const unvoteComment = async (postId: number): Promise<string | null> => {
+    return await voteComment(postId, "unvote")
+};
+
+const voteComment = async (postId: number, type: "upvote" | "unvote" | "downvote"): Promise<string | null> => {
+    let data: IServerResponse | null = null;
+    const authToken = getAuthToken();
+    await fetch(`${config.API_URL}/comments/comment/${postId}/${type}`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${authToken}`
+        }
+    })
+        .then(async (response) => {
+            let resObj: IServerResponse = await response.json();
+
+            if (response.status === 200) {
+                data = resObj;
+            } else {
+                throw resObj.message;
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    console.log(data);
+    return data ? data["message"] : null;
+};

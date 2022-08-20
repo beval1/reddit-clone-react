@@ -236,9 +236,9 @@ export default function RegisterPage(props: RegisterPageProps) {
 				</Button>
 			</Box>
 			<Box margin="20px 0">
-				<Typography component="p">
-					Already a Redditor?{" "}
-					<Typography component="p">
+				<Box display="flex" gap="5px">
+					Already a Redditor?
+					<Typography component="p" display="flex">
 						<StyledLink
 							to="#"
 							onClick={() => props.modalManagement(null, "login")}
@@ -246,7 +246,7 @@ export default function RegisterPage(props: RegisterPageProps) {
 							LOG IN
 						</StyledLink>
 					</Typography>
-				</Typography>
+				</Box>
 			</Box>
 		</Box>
 	);

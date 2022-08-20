@@ -8,4 +8,7 @@ export interface IComment {
     author: IAuthor;
     replies: IComment[];
     repliesCount: number;
+    upvotedByUser: boolean;
+    downvotedByUser: boolean;
+    votes: number;
 }

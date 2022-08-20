@@ -128,20 +128,20 @@ export default function LoginPage(props: LoginPageProps) {
 				</Button>
 			</Box>
 			<Box marginTop="10px">
-				<Typography component="p" marginBottom="15px" fontSize="small">
+				<Box marginBottom="15px" fontSize="small" display="flex" gap="5px">
 					Forgot your
-					<Typography component="p" fontSize="small">
+					<Typography component="p" fontSize="small" display="flex">
 						<StyledLink to="/"> username </StyledLink>
 					</Typography>
 					or
-					<Typography component="p" fontSize="small">
+					<Typography component="p" fontSize="small" display="flex">
 						<StyledLink to="/"> password </StyledLink>
 					</Typography>
 					?
-				</Typography>
-				<Typography component="p">
-					New to Reddit?{" "}
-					<Typography component="p">
+				</Box>
+				<Box display="flex" gap="5px">
+					New to Reddit?
+					<Typography component="p" display="flex">
 						<StyledLink
 							to="#"
 							onClick={() =>
@@ -151,7 +151,7 @@ export default function LoginPage(props: LoginPageProps) {
 							SIGN UP
 						</StyledLink>
 					</Typography>
-				</Typography>
+				</Box>
 			</Box>
 		</Box>
 	);

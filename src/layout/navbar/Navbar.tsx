@@ -146,6 +146,7 @@ const Navbar = () => {
 								borderRadius: "5px",
 							}}
 							className="box-hover"
+							onClick={() => navigate("/create-post/text")}
 						></AddIcon>
 						<Box
 							className="profile-box"
