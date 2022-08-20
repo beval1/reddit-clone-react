@@ -40,6 +40,27 @@ export const logIn = async (
 	return await getUserProfile();
 };
 
+export const registerUser = async (
+	username: string,
+	email: string,
+	password: string
+): Promise<string | null> => {
+	const response = await fetch(`${config.API_URL}/auth/signup`, {
+		method: "POST",
+		headers: {
+			"Accept": "application/json",
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ username, email, password })
+	});
+	let resObj: IServerResponse = await response.json();
+	if (response.status !== 201) {
+		console.log(resObj.message)
+		throw Error(resObj.message)
+	}
+	return resObj.message || null;
+};
+
 export const getUserProfile = async (): Promise<IUser | null> => {
 	const authToken = getAuthToken();
 	const response = await fetch(`${config.API_URL}/users/my-profile`, {

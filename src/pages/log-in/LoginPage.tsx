@@ -102,7 +102,7 @@ export default function LoginPage(props: LoginPageProps) {
 						name="usernameOrEmail"
 						variant="filled"
 						size="small"
-						onChange={(e) => handleInputChange(e, setForm)}
+						onChange={(e: any) => handleInputChange(e, setForm)}
 					/>
 					<RedditTextField
 						name="password"
@@ -111,7 +111,7 @@ export default function LoginPage(props: LoginPageProps) {
 						variant="filled"
 						size="small"
 						type="password"
-						onChange={(e) => handleInputChange(e, setForm)}
+						onChange={(e: any) => handleInputChange(e, setForm)}
 					/>
 				</FormGroup>
 				<Button
@@ -141,7 +141,7 @@ export default function LoginPage(props: LoginPageProps) {
 				</Typography>
 				<Typography component="p">
 					New to Reddit?{" "}
-					<Typography component="a">
+					<Typography component="p">
 						<StyledLink
 							to="#"
 							onClick={() =>

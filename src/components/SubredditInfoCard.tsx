@@ -100,7 +100,7 @@ const SubredditInfoCard = (props: Props) => {
                             <Box width="100%" margin="15px 0">
                             <Button sx={{
                                 margin: "0 auto",
-                                width: "80%",
+                                width: "100%",
                                 borderRadius: "25px"
                             }}
                                 size="large"

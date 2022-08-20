@@ -1,5 +1,5 @@
 import { alpha, OutlinedInputProps, styled, TextField, TextFieldProps } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 
 export const RedditTextField = styled((props: TextFieldProps) => (
 			<TextField
