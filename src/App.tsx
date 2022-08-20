@@ -29,6 +29,10 @@ function App() {
 		"login" | "register" | null | undefined
 		>(null);
 	const [user, setUser] = useState<IUser | null>(null);
+	const localUser = localStorage.getItem('user')
+	if (localUser && localStorage.getItem('accessToken') && !user) {
+		setUser(JSON.parse(localUser));
+	}
 
 	return (
 		<ThemeProvider theme={theme}>

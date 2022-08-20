@@ -1,15 +1,22 @@
-import { Avatar, Card, Typography } from '@mui/material'
+import { Avatar, Card, Divider, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import React, { useContext, useState } from 'react'
 import { IComment } from '../api/interfaces/IComment'
 import { calculateTimePassed } from '../utils/utility'
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+// import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+// import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
+import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
+import QuickreplyOutlinedIcon from '@mui/icons-material/QuickreplyOutlined';
 import { ModalContext, UserContext } from '../App'
-import { downvoteComment, unvoteComment, upvoteComment } from '../api/commentService'
+import { deleteComment, downvoteComment, unvoteComment, upvoteComment } from '../api/commentService'
+import ReplyEditCommentModal from '../pages/comments/ReplyEditCommentModal'
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 type CommentCardProps = {
     comment: IComment
+    setComments: () => void
 }
 
 const CommentCard = (props: CommentCardProps) => {
@@ -17,6 +24,7 @@ const CommentCard = (props: CommentCardProps) => {
     const [downvoted, setDownvoted] = useState<boolean>(
         props.comment.downvotedByUser
     );
+    const [modal, setModal] = useState<"edit" | "reply" | null>(null);
     const userContext = useContext(UserContext)
     const modalContext = useContext(ModalContext)
 
@@ -52,76 +60,140 @@ const CommentCard = (props: CommentCardProps) => {
         }
     };
 
+    const handleReply = () => {
+        if (!userContext.user) {
+            modalContext.setShowLoginRegisterModal("register");
+            return;
+        }
+
+        setModal("reply");
+    }
+
+    const handleDelete = () => {
+        deleteComment(props.comment.id);
+        props.setComments();
+    }
+
+    const handleEdit = () => {
+        setModal("edit");
+    }
+
+    const listReplies = () => {
+        props.comment.replies = props.comment.replies.sort((a, b) => a.votes - b.votes).reverse();
+        return props.comment.replies.map((r) => <CommentCard key={r.id} comment={r} setComments={props.setComments} />)
+    }
+
     return (
         <Box margin="10px">
-            <Box display="flex" flexDirection="row">
-                <Box className="left-bar" display="flex" flexDirection="column">
-                    <Avatar
-                        alt={props.comment.author.username}
-                        src={props.comment.author.profileImage || ""}
-                        variant="circular"
-                        sx={{
-                            width: 24,
-                            height: 24,
-                            marginRight: "5px",
-                        }}
-                    />
-                </Box>
-                <Box className="general-comment-info" display="flex" flexDirection="column" gap="7px">
-                    <Box display="flex" gap="5px">
-                        <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            fontWeight="bold"
-                        >
-                            {`${props.comment.author.username} - `}
-                        </Typography>
-                        <Typography
-                            variant="body2"
-                            color="text.secondary"
-                        >
-                            {`${calculateTimePassed(props.comment.createdOn)}`}
-                        </Typography>
-                    </Box>
-                    <Box className="comment-content">
-                        <Typography
-                            variant="body2"
-                            color="text.secondary"
-                        >
-                            {props.comment.content}
-                        </Typography>
-                    </Box>
-                    <Box
-                        display="flex"
-                        flexDirection="row"
-                        gap="5px"
-                        alignItems="center"
-                    >
-                        <ThumbUpIcon
-                            fontSize="small"
-                            onClick={() => handleUpvote(props.comment.id)}
-                            sx={(theme) => ({
-                                fill: upvoted
-                                    ? theme.palette.info.main
-                                    : null,
-                            })}
+            <Box>
+                <ReplyEditCommentModal modal={modal} setModal={setModal} comment={props.comment} setComments={props.setComments}></ReplyEditCommentModal>
+                <Box display="flex" flexDirection="row">
+                    <Box className="left-bar" display="flex" flexDirection="column" alignItems="center">
+                        <Avatar
+                            alt={props.comment.author.username}
+                            src={props.comment.author.profileImage || ""}
+                            variant="circular"
+                            sx={{
+                                width: 30,
+                                height: 30,
+                                marginRight: "5px",
+                            }}
                         />
-                        <Typography variant="body2" color="text.secondary">
-                            {props.comment.votes}
-                        </Typography>
-                        <ThumbDownIcon
-                            fontSize="small"
-                            onClick={() => handleDownvote(props.comment.id)}
-                            sx={(theme) => ({
-                                fill: downvoted
-                                    ? theme.palette.info.main
-                                    : null,
-                            })}
-                        />
+                        <Divider orientation="vertical" sx={{
+                            marginRight: "4px",
+                        }}></Divider>
+                    </Box>
+                    <Box className="general-comment-info" display="flex" flexDirection="column" gap="7px" marginTop="4px">
+                        <Box display="flex" gap="5px">
+                            <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                fontWeight="bold"
+                            >
+                                {`${props.comment.author.username} - `}
+                            </Typography>
+                            <Typography
+                                variant="body2"
+                                color="text.secondary"
+                            >
+                                {`${calculateTimePassed(props.comment.createdOn)}`}
+                            </Typography>
+                            {props.comment.author.id === userContext?.user?.id ?
+                                <Box display="flex" gap="5px">
+                                    <EditIcon fontSize="small" onClick={handleEdit} className="box-hover" sx={{ padding: "3px" }} />
+                                    <DeleteIcon fontSize="small" onClick={handleDelete} className="box-hover" sx={{ padding: "3px" }} />
+                                </Box> : null}
+                        </Box>
+                        <Box className="comment-content">
+                            <Typography
+                                variant="body2"
+                                color="text.secondary"
+                            >
+                                {props.comment.content}
+                            </Typography>
+                        </Box>
+                        <Box
+                            display="flex"
+                            flexDirection="row"
+                            gap="12px"
+                            alignItems="center"
+                        >
+                            <ThumbUpAltOutlinedIcon
+                                fontSize="small"
+                                onClick={() => handleUpvote(props.comment.id)}
+                                sx={(theme) => ({
+                                    fill: upvoted
+                                        ? theme.palette.info.main
+                                        : null,
+                                })}
+                            />
+                            <Typography variant="body2" color="text.secondary">
+                                {props.comment.votes}
+                            </Typography>
+                            <ThumbDownAltOutlinedIcon
+                                fontSize="small"
+                                onClick={() => handleDownvote(props.comment.id)}
+                                sx={(theme) => ({
+                                    fill: downvoted
+                                        ? theme.palette.info.main
+                                        : null,
+                                })}
+                                className="box-hover"
+                            />
+                            <Box
+                                display="flex"
+                                gap="3px"
+                                className="box-hover"
+                                onClick={() => handleReply()}
+                                padding="5px">
+                                <QuickreplyOutlinedIcon
+                                    fontSize="small"
+                                />
+                                <Typography variant="body2" color="text.secondary">
+                                    Reply
+                                </Typography>
+                            </Box>
+                            <Typography variant="body2" color="text.secondary" className="box-hover" sx={{ padding: "5px" }}>
+                                Share
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary" className="box-hover" sx={{ padding: "5px" }}>
+                                Report
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary" className="box-hover" sx={{ padding: "5px" }}>
+                                Save
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary" className="box-hover" sx={{ padding: "5px" }}>
+                                Follow
+                            </Typography>
+                        </Box>
+                        <Box className="replies">
+                            {props.comment.replies ? listReplies() : null}
+                        </Box>
                     </Box>
                 </Box>
-            </Box>
-        </Box >
+            </Box >
+
+        </Box>
     );
 }
 

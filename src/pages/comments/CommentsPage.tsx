@@ -25,32 +25,32 @@ const CommentsPage = () => {
     const commentRef = useRef<HTMLInputElement | null>(null)
 
     useEffect(() => {
-        if (!postId){
+        if (!postId) {
             return;
         }
 
-        getPost(postId).then((post: IPost | null) => {
-            setOriginalPost(post);
-            if (post) {
-                getSubreddit(post?.subreddit.id).then(data => {
-                    console.log(data)
-                    setSubreddit(data)
-                }).catch(error => console.log(error));
-                loadComments(post);
-            }
-        }).catch(error => console.log(error.message))
+        if (!originalPost) {
+            getPost(postId).then((post: IPost | null) => {
+                setOriginalPost(post)
+            }).catch(error => console.log(error.message))
+        }
 
-    }, [])
+        if (originalPost) {
+            getSubreddit(originalPost?.subreddit.id).then(data => {
+                console.log(data)
+                setSubreddit(data)
+            }).catch(error => console.log(error));
+            loadComments();
+        }
+    }, [originalPost])
 
-    const loadComments = (post: IPost | null) => {
-        if (post) {
-            getAllCommentsForPost(post.id).then(data => {
+    const loadComments = () => {
+        if (originalPost) {
+            getAllCommentsForPost(originalPost.id).then(data => {
                 //comparing content is very, very bad idea...
                 //but theoretically there shouldn't be two posts with exactly the same content
                 data = data.filter(c => {
-                    console.log(c.content)
-                    if (c.content.trim() !== post.content?.trim()) {
-                        console.log("here")
+                    if (c.content.trim() !== originalPost.content?.trim()) {
                         return true;
                     }
                     return false;
@@ -71,7 +71,7 @@ const CommentsPage = () => {
                 if (commentRef.current) {
                     commentRef.current.value = "";
                 }
-                loadComments(originalPost)
+                loadComments()
             }).catch(error => console.log(error.message))
         }
     }
@@ -101,7 +101,7 @@ const CommentsPage = () => {
                                         <RedditTextField
                                             multiline
                                             rows={6}
-                                            placeholder="What are your thought?"
+                                            placeholder="What are your thoughts?"
                                             variant='filled'
                                             fullWidth
                                             sx={{
@@ -125,7 +125,7 @@ const CommentsPage = () => {
                                         </Box>
                                     </Box>
                                     <Divider></Divider>
-                                    {comments.map((c) => <CommentCard key={c.id} comment={c} />)}
+                                    {comments.map((c) => <CommentCard key={c.id} comment={c} setComments={loadComments} />)}
                                 </Card>
                             </Box>
                         </Box>

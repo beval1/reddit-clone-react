@@ -32,6 +32,55 @@ export const createCommentForPost = async (postId: number, commentContent: strin
     return resObj.messgage || null;
 }
 
+export const createReply = async (commentId: number, commentContent: string): Promise<string | null> => {
+    const authToken = getAuthToken();
+    const response = await fetch(`${config.API_URL}/comments/comment/${commentId}`, {
+        method: "post",
+        headers: {
+            "Authorization": `Bearer ${authToken}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content: commentContent })
+    });
+    const resObj = await response.json();
+    if (response.status !== 201) {
+        throw Error(resObj.message)
+    }
+    return resObj.messgage || null;
+}
+
+export const editComment = async (commentId: number, commentContent: string): Promise<string | null> => {
+    const authToken = getAuthToken();
+    const response = await fetch(`${config.API_URL}/comments/comment/${commentId}`, {
+        method: "PATCH",
+        headers: {
+            "Authorization": `Bearer ${authToken}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content: commentContent })
+    });
+    const resObj = await response.json();
+    if (response.status !== 200) {
+        throw Error(resObj.message)
+    }
+    return resObj.messgage || null;
+}
+
+export const deleteComment = async (commentId: number): Promise<string | null> => {
+    const authToken = getAuthToken();
+    const response = await fetch(`${config.API_URL}/comments/comment/${commentId}`, {
+        method: "delete",
+        headers: {
+            "Authorization": `Bearer ${authToken}`,
+        },
+    });
+    const resObj = await response.json();
+    if (response.status !== 200) {
+        throw Error(resObj.message)
+    }
+    return resObj.messgage || null;
+}
+
 export const upvoteComment = async (postId: number): Promise<string | null> => {
     return await voteComment(postId, "upvote");
 }
