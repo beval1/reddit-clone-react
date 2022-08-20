@@ -4,7 +4,10 @@ import { IComment } from "./interfaces/IComment";
 import { IServerResponse } from "./interfaces/IServerResponse";
 
 export const getAllCommentsForPost = async (postId: number, pageNumber?: number): Promise<IComment[]> => {
-    const response = await fetch(`${config.API_URL}/comments/${postId}`);
+    const authToken = getAuthToken();
+    const response = await fetch(`${config.API_URL}/comments/${postId}`, {
+        headers: {"Authorization": `Bearer ${authToken}`}
+    });
     const resObj = await response.json();
     if (response.status !== 200) {
         throw Error(resObj.message)

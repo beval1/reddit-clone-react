@@ -1,10 +1,14 @@
 import config from "../config";
+import { getAuthToken } from "./authService";
 import { IPost } from "./interfaces/IPost";
 import { IServerResponse } from "./interfaces/IServerResponse";
 
 export const getFeed = async (): Promise<IPost[] | null> => {
 	let data: IServerResponse<IPost[]> | null = null;
-	await fetch(`${config.API_URL}/get-feed`)
+	const authToken = getAuthToken();
+	await fetch(`${config.API_URL}/get-feed`, {
+		headers: { "Authorization": `Bearer ${authToken}` }
+	})
 		.then(async (response) => {
 			let resObj: IServerResponse<IPost[]> = await response.json();
 
