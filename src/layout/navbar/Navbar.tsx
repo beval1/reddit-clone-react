@@ -22,6 +22,7 @@ import { GreenDotBadge } from "../../components/GreenDotBadge";
 import SubredditSelect from "../../components/SubredditSelect";
 import { ModalContext, UserContext } from "../../App";
 import { ISubreddit } from "../../api/interfaces/ISubreddit";
+import ProfileMenu from "../../components/ProfileMenu";
 
 const StyledToolbar = styled(Toolbar)({
 	display: "flex",
@@ -59,7 +60,12 @@ const Navbar = () => {
 	const user = userContext.user
 	const theme = useTheme();
 	const [selectedSubreddit, setSelectedSubreddit] = useState<ISubreddit | null>(null);
+	const [profileDropdown, setProfileDropdown] = React.useState<null | HTMLElement>(null);
 
+
+	const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+		setProfileDropdown(event.currentTarget);
+	};
 
 	return (
 		<AppBar position="fixed" elevation={1}>
@@ -69,6 +75,7 @@ const Navbar = () => {
 					modal.setShowLoginRegisterModal(state)
 				}
 			/>
+			<ProfileMenu profileDropdown={profileDropdown} setProfileDropdown={setProfileDropdown}></ProfileMenu>
 			<StyledToolbar variant="dense">
 				<Box
 					display="flex"
@@ -160,6 +167,7 @@ const Navbar = () => {
 									border: "1px solid black",
 								},
 							}}
+							onClick={e => handleOpenUserMenu(e)}
 						>
 							<Box
 								className="avatar-box"

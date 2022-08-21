@@ -9,7 +9,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import ImageIcon from "@mui/icons-material/Image";
 import LinkIcon from "@mui/icons-material/Link";
-import "./CreatePost.css";
+// import "./CreatePost.css";
 import KeyboardVoiceIcon from "@mui/icons-material/KeyboardVoice";
 import BallotIcon from "@mui/icons-material/Ballot";
 import SubredditSelect from "../../components/SubredditSelect";
@@ -33,10 +33,6 @@ const CreatePost = (props: Props) => {
 	const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
 		setPostType(newValue);
 	};
-
-	// const getSubredditByName = (): ISubreddit | undefined => {
-	// 	return user?.subreddits.find(s => s.name === selectedSubreddit);
-	// }
 
 	return (
 		<Box>

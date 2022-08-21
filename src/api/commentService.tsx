@@ -29,7 +29,7 @@ export const createCommentForPost = async (postId: number, commentContent: strin
     if (response.status !== 201) {
         throw Error(resObj.message)
     }
-    return resObj.messgage || null;
+    return resObj.message || null;
 }
 
 export const createReply = async (commentId: number, commentContent: string): Promise<string | null> => {
@@ -46,7 +46,7 @@ export const createReply = async (commentId: number, commentContent: string): Pr
     if (response.status !== 201) {
         throw Error(resObj.message)
     }
-    return resObj.messgage || null;
+    return resObj.message || null;
 }
 
 export const editComment = async (commentId: number, commentContent: string): Promise<string | null> => {
@@ -63,7 +63,7 @@ export const editComment = async (commentId: number, commentContent: string): Pr
     if (response.status !== 200) {
         throw Error(resObj.message)
     }
-    return resObj.messgage || null;
+    return resObj.message || null;
 }
 
 export const deleteComment = async (commentId: number): Promise<string | null> => {
@@ -78,7 +78,7 @@ export const deleteComment = async (commentId: number): Promise<string | null> =
     if (response.status !== 200) {
         throw Error(resObj.message)
     }
-    return resObj.messgage || null;
+    return resObj.message || null;
 }
 
 export const upvoteComment = async (postId: number): Promise<string | null> => {

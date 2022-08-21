@@ -10,6 +10,7 @@ import HomePage from "./pages/home/HomePage";
 import NotFoundPage from "./pages/not-found/NotFoundPage";
 import CreatePost from "./pages/create-post/CreatePost";
 import CommentsPage from "./pages/comments/CommentsPage";
+import MyProfile from "./pages/my-profile/MyProfile";
 
 const root = ReactDOM.createRoot(
 	document.getElementById("root") as HTMLElement
@@ -20,6 +21,7 @@ root.render(
 			<Routes>
 				<Route path="/" element={<App />}>
 					<Route path="/home" element={<HomePage />} />
+					<Route path="/users/my-profile" element={<MyProfile />} />
 					<Route path="/create-post/:postTypeParam" element={<CreatePost />} />
 					<Route path="/comments/:postId" element={<CommentsPage />} />
 					<Route path="*" element={<NotFoundPage />} />

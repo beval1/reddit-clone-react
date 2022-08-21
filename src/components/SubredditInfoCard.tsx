@@ -4,7 +4,7 @@ import { ISubreddit } from '../api/interfaces/ISubreddit'
 import { getSubreddit, joinSubreddit } from '../api/subredditService'
 import CakeOutlinedIcon from '@mui/icons-material/CakeOutlined';
 import { ModalContext, UserContext } from '../App';
-import { isUserAlreadyJoinedSubreddit } from '../utils/utility';
+import { isUserAlreadyJoinedSubreddit, transformDate } from '../utils/utility';
 import { getUserProfile } from '../api/authService';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,19 +16,6 @@ const SubredditInfoCard = (props: Props) => {
     const userContext = useContext(UserContext);
     const modalContext = useContext(ModalContext);
     const navigate = useNavigate();
-
-    const transformDate = () => {
-        if (!props.subreddit) {
-            return;
-        }
-
-        const date = new Date(props.subreddit.createdOn);
-        const monthName = date.toLocaleString('en-US', {
-            month: 'long',
-        })
-
-        return `Created ${monthName} ${date.getDay()}, ${date.getFullYear()}`;
-    }
 
     const handleJoin = () => {
         if (!userContext.user) {
@@ -93,7 +80,7 @@ const SubredditInfoCard = (props: Props) => {
                         }}></Divider>
                         <Box display="flex" alignItems="center" gap="10px">
                             <CakeOutlinedIcon fontSize="large"></CakeOutlinedIcon>
-                            <Typography variant="body2" fontWeight="bold">{transformDate()}</Typography>
+                            <Typography variant="body2" fontWeight="bold">{transformDate(props.subreddit?.createdOn)}</Typography>
                         </Box>
                         <Box width="100%" display="flex" justifyContent="center">
                         {isUserAlreadyJoinedSubreddit(userContext.user, props.subreddit) ?
@@ -130,3 +117,4 @@ const SubredditInfoCard = (props: Props) => {
 }
 
 export default SubredditInfoCard
+

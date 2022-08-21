@@ -17,3 +17,20 @@
 .selected-sorting > .MuiTypography-root {
 	color: #0079D3;
 }
+
+.Mui-selected.MuiTab-labelIcon {
+    color: #0079D3;
+}
+
+.Mui-selected.MuiTab-textColorInherit {
+	color: #0079D3;
+}
+
+.Mui-selected.MuiTab-textColorPrimary {
+	color: #0079D3;
+}
+
+.MuiTab-root {
+    border-right: "1px solid black";
+} 
+

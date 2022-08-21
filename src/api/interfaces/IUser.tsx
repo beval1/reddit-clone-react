@@ -7,7 +7,8 @@ export interface IUser {
     firstName: string | null,
     lastName: string | null,
     gender: "male" | "female" | null,
-    birthdate: Date | null,
+    birthdate: string | null,
+    createdOn: string
     postKarma: number,
     commentKarma: number,
     awardeeKarma: number,

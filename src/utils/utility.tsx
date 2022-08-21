@@ -27,6 +27,19 @@ export const calculateTimePassed = (dateString: string): string => {
     }
 };
 
+export const transformDate = (dateStr: string | undefined | null): string | null => {
+    if (!dateStr) {
+        return null;
+    }
+
+    const date = new Date(dateStr);
+    const monthName = date.toLocaleString('en-US', {
+        month: 'long',
+    })
+
+    return `Created ${monthName} ${date.getDay()}, ${date.getFullYear()}`;
+}
+
 export const isUserAlreadyJoinedSubreddit = (user: IUser | null, subreddit: ISubreddit | null): boolean => {
     if (!user || !subreddit) {
         return false;
